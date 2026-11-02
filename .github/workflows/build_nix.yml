@@ -11,3 +11,8 @@ jobs:
       # nix is already on the runner's PATH — no install-nix-action needed
       - name: Building package
         run: nix build
+      - name: Push to Attic
+        run: |
+          set -euo pipefail
+          command -v attic >/dev/null || { echo "attic not installed; skipping"; exit 0; }
+          XDG_CONFIG_HOME=/etc attic push 2143nix ./result || echo "::warning::attic push failed"
